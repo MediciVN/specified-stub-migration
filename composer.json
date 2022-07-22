@@ -1,0 +1,19 @@
+{
+    "name": "medicivn/specified-stub-migration",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "MediciVN\\SpecifiedStubMigration\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Medici Dev"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/database": "^9.17",
+        "illuminate/support": "^9.17"
+    }
+}

@@ -17,7 +17,7 @@ class MigrateMakeCommand extends BaseCommand
      *
      * @var string
      */
-    protected string $signature = 'make:specified_stub_migration
+    protected $signature = 'make:specified_stub_migration
         {name : The name of the migration}
         {--table= : The table to migrate}
         {--stubpath= : The location  of the stub file to create migration files}
@@ -30,7 +30,7 @@ class MigrateMakeCommand extends BaseCommand
      *
      * @var string
      */
-    protected string $description = 'Create a new migration file';
+    protected $description = 'Create a new migration file';
 
     /**
      * The migration creator instance.

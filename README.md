@@ -2,21 +2,51 @@
 
 The command create migration file with specified stub. Refer from Laravel original "make:migration" command.
 
-Example:
+## Settings
+
+Add `\MediciVN\SpecifiedStubMigration\MigrateMakeCommand::class` to `app/Console/Kernel.php`
 
 ```injectablephp
-php artisan make:specified_stub_migration create_users_table --table=users --stubpath=database/migrations/stubs/create_dummy_table.stub
+<?php
+
+namespace App\Console;
+
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+
+class Kernel extends ConsoleKernel
+{
+    protected $commands = [
+        \MediciVN\SpecifiedStubMigration\MigrateMakeCommand::class,
+    ];
+
+```
+
+Add `MediciVN\SpecifiedStubMigration\MigrationServiceProvider::class` to `config/app.php`
+
+```injectablephp
+'providers' => [
+    ...
+    MediciVN\SpecifiedStubMigration\MigrationServiceProvider::class
+],
+```
+
+## Example
+
+```injectablephp
+php artisan make:specified_stub_migration create_users_table --table=users --stubpath=database/migrations/stubs/create_users_table.stub
 ```
 
 ```injectablephp
 Artisan::call("make:specified_stub_migration", [
     "name"          => "create_users_table",
     "--table"       => "users",
-    "--stubpath"    => database_path("migrations/stubs/create_dummy_users_table.stub"),
+    "--stubpath"    => database_path("migrations/stubs/create_users_table.stub"),
 ]);
 ```
 
-The content of `database/mirgations/stubs/create_dummy_users_table.stub`
+The content of `database/mirgations/stubs/create_users_table.stub`
+
 ```injectablephp
 <?php
 

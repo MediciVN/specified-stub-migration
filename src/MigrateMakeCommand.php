@@ -23,7 +23,8 @@ class MigrateMakeCommand extends BaseCommand
         {--stubpath= : The location  of the stub file to create migration files}
         {--path= : The location where the migration file should be created}
         {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths}
-        {--fullpath : Output the full path of the migration}';
+        {--fullpath : Output the full path of the migration}
+        {--no-date-prefix : date prefix in filename}';
 
     /**
      * The console command description.
@@ -69,11 +70,7 @@ class MigrateMakeCommand extends BaseCommand
      */
     public function handle()
     {
-        $name       = Str::snake(trim($this->input->getArgument('name')));
-        $table      = $this->input->getOption('table');
-        $stubpath   = $this->input->getOption('stubpath');
-
-        $this->writeMigration($name, $table, $stubpath);
+        $this->writeMigration();
 
         $this->composer->dumpAutoloads();
     }
@@ -87,13 +84,22 @@ class MigrateMakeCommand extends BaseCommand
      * @return void
      * @throws Exception
      */
-    protected function writeMigration(string $name, string $table, string $stubpath): void
+    protected function writeMigration(): void
     {
+        $name           = Str::snake(trim($this->input->getArgument('name')));
+        $table          = $this->input->getOption('table');
+        $stubpath       = $this->input->getOption('stubpath');
+        $noDatePrefix  = $this->input->getOption('no-date-prefix');
+
         $file = $this->creator->createByStub(
-            $name, $this->getMigrationPath(), $table, $stubpath
+            $name,
+            $this->getMigrationPath(),
+            $table,
+            $stubpath,
+            $noDatePrefix,
         );
 
-        if (! $this->option('fullpath')) {
+        if (!$this->option('fullpath')) {
             $file = pathinfo($file, PATHINFO_FILENAME);
         }
 
@@ -107,9 +113,9 @@ class MigrateMakeCommand extends BaseCommand
      */
     protected function getMigrationPath(): string
     {
-        if (! is_null($targetPath = $this->input->getOption('path'))) {
-            return ! $this->usingRealPath()
-                ? $this->laravel->basePath().'/'.$targetPath
+        if (!is_null($targetPath = $this->input->getOption('path'))) {
+            return !$this->usingRealPath()
+                ? $this->laravel->basePath() . '/' . $targetPath
                 : $targetPath;
         }
 

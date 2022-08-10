@@ -14,14 +14,15 @@ class MigrationCreator extends BaseMigrationCreator
      * @param string $path
      * @param string $table
      * @param string $stubPath
+     * @param bool   $noDatePrefix
      * @return string
      * @throws Exception
      */
-    public function createByStub(string $name, string $path, string $table, string $stubPath): string
+    public function createByStub(string $name, string $path, string $table, string $stubPath, $noDatePrefix = false): string
     {
         $this->ensureMigrationDoesntAlreadyExist($name, $path);
 
-        $path = $this->getPath($name, $path);
+        $path = $this->getPath($name, $path, $noDatePrefix);
 
         // get stub file
         $stub = $this->files->get($stubPath);
@@ -38,5 +39,21 @@ class MigrationCreator extends BaseMigrationCreator
         $this->firePostCreateHooks($table, $path);
 
         return $path;
+    }
+
+    /**
+     * Get the full path to the migration.
+     *
+     * @param  string  $name
+     * @param  string  $path
+     * @return string
+     */
+    protected function getPath($name, $path, $noDatePrefix = true)
+    {
+        if ($noDatePrefix) {
+            return $path . '/' . $name . '.php';
+        }
+
+        return $path . '/' . $this->getDatePrefix() . '_' . $name . '.php';
     }
 }
